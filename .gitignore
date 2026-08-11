@@ -1,0 +1,62 @@
+# Java / Gradle (todo-api)
+todo-api/HELP.md
+todo-api/.gradle/
+todo-api/build/
+!todo-api/gradle/wrapper/gradle-wrapper.jar
+!todo-api/**/src/main/**/build/
+!todo-api/**/src/test/**/build/
+
+### STS ###
+todo-api/.apt_generated/
+todo-api/.classpath
+todo-api/.factorypath
+todo-api/.project
+todo-api/.settings/
+todo-api/.springBeans
+todo-api/.sts4-cache/
+todo-api/bin/
+!todo-api/**/src/main/**/bin/
+!todo-api/**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+todo-api/out/
+!todo-api/**/src/main/**/out/
+!todo-api/**/src/test/**/out/
+
+### NetBeans ###
+todo-api/nbproject/private/
+todo-api/nbbuild/
+todo-api/dist/
+todo-api/nbdist/
+todo-api/.nb-gradle/
+
+# Node / Vite (todo-web)
+todo-web/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+todo-web/node_modules/
+todo-web/dist/
+todo-web/dist-ssr/
+todo-web/*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+todo-web/.vscode/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.clj-kondo/
+.lsp/
