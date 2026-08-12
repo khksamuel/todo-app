@@ -50,4 +50,8 @@ public class CategoryService {
     private CategoryResponse toResponse(Category category) {
         return modelMapper.map(category, CategoryResponse.class);
     }
+
+    public boolean existsByName(String name) {
+        return categoryRepository.existsByName(name);
+    }
 }

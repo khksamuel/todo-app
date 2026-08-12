@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/categories")
@@ -33,6 +34,18 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponse createCategory(@RequestBody CategoryRequest request) {
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Category name cannot be null or blank");
+        }
+        if (request.getColour() == null || request.getColour().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Category colour cannot be null or blank");
+        }
+
+        // if name already exist 
+        if (categoryService.existsByName(request.getName())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Category with name '" + request.getName() + "' already exists");
+        }
+
         return categoryService.create(request);
     }
 
