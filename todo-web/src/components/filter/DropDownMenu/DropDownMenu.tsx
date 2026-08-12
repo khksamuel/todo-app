@@ -110,6 +110,18 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
       </button>
       {isOpen && (
         <ul aria-label="Categories" className="category-dropdown__menu" role="listbox">
+          <li>
+            <button
+              className="category-dropdown__option"
+              onClick={() => {
+                setSelectedCategoryId("");
+                setIsOpen(false);
+              }}
+              type="button"
+            >
+              All Categories
+            </button>
+          </li>
           {categories.map((category) => (
             <li aria-selected={selectedCategoryId === String(category.id)} key={category.id} role="option">
               <button
