@@ -9,9 +9,11 @@ import com.nology.todoapi.todos.entities.Todo;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional
 public class TodosService {
 
     private final TodosRepository todosRepository;

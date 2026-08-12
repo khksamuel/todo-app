@@ -48,6 +48,7 @@ todo-web/node_modules/
 todo-web/dist/
 todo-web/dist-ssr/
 todo-web/*.local
+todo-web/.env
 
 # Editor directories and files
 .vscode/*
