@@ -1,4 +1,4 @@
-package com.example.todo_api;
+package com.nology.todoapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
