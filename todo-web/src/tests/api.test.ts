@@ -5,7 +5,7 @@ describe("apiFetch", () => {
 
   beforeEach(() => {
     fetchMock.mockReset();
-    global.fetch = fetchMock;
+    globalThis.fetch = fetchMock;
   });
 
   it("calls the API endpoint with the default Accept header and returns json", async () => {
