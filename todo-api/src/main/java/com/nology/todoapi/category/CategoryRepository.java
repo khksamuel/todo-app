@@ -1,5 +1,7 @@
 package com.nology.todoapi.category;
 
-public class CategoryRepository {
-    
+import com.nology.todoapi.category.entities.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 }
