@@ -9,7 +9,7 @@ const baseUrl = '/api'
 //     categoryId: 1,
 //   }),
 // })
-export async function apiFetch(path: string, init?: RequestInit) {
+export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
   const response = await fetch(`${baseUrl}${path}`, {
     ...init,
     headers: {
@@ -26,5 +26,7 @@ export async function apiFetch(path: string, init?: RequestInit) {
     return null
   }
 
-  return response.json()
+  return response.json() as Promise<T>
 }
+
+export default apiFetch
