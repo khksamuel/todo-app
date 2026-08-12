@@ -33,6 +33,7 @@ todo-api/nbbuild/
 todo-api/dist/
 todo-api/nbdist/
 todo-api/.nb-gradle/
+todo-api/.env
 
 # Node / Vite (todo-web)
 todo-web/logs/
