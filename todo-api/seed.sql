@@ -1,4 +1,11 @@
--- Run this after dbsetup.sql to add demo data.
+-- Run this after dbsetup.sql to replace all existing todo_app demo data.
+-- This deletes every todo and category in the schema before inserting the data below.
+
+DELETE FROM todo_app.todos;
+DELETE FROM todo_app.categories;
+
+ALTER TABLE todo_app.todos AUTO_INCREMENT = 1;
+ALTER TABLE todo_app.categories AUTO_INCREMENT = 1;
 
 INSERT INTO todo_app.categories (id, name, colour, is_achived) VALUES
     (1, 'Work', '#2563EB', FALSE),
