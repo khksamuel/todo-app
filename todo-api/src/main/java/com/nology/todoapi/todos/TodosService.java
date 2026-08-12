@@ -33,6 +33,10 @@ public class TodosService {
         return toResponse(findActive(id));
     }
 
+    public List<TodoResponse> findAllDeleted() {
+        return todosRepository.findAllDeletedWithCategory().stream().map(this::toResponse).toList();
+    }
+
     public TodoResponse create(TodoRequest request) {
         Category category = request.categoryId() == null ? null : findCategory(request.categoryId());
         return toResponse(todosRepository.save(new Todo(request.dueAt(), category)));
@@ -51,6 +55,37 @@ public class TodosService {
         todosRepository.save(todo);
     }
 
+    public void softDeleteDone(Long id) {
+        Todo todo = findActive(id);
+        if (!todo.isDone()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Todo is not done");
+        }
+        todo.setAchived(true);
+        todosRepository.save(todo);
+    }
+
+    public void softDeleteAllDone() {
+        List<Todo> doneTodos = todosRepository.findAllActiveDone();
+        doneTodos.forEach(todo -> todo.setAchived(true));
+        todosRepository.saveAll(doneTodos);
+    }
+
+    public TodoResponse markDone(Long id) {
+        Todo todo = findActive(id);
+        todo.setDone(true);
+        return toResponse(todosRepository.save(todo));
+    }
+
+    public void hardDelete(Long id) {
+        Todo todo = todosRepository.findDeletedByIdWithCategory(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Deleted todo not found"));
+        todosRepository.delete(todo);
+    }
+
+    public void hardDeleteAllDeleted() {
+        todosRepository.deleteAll(todosRepository.findAllDeletedWithCategory());
+    }
+
     private Todo findActive(Long id) {
         return todosRepository.findActiveByIdWithCategory(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
@@ -64,6 +99,6 @@ public class TodosService {
     private TodoResponse toResponse(Todo todo) {
         Long categoryId = todo.getCategory() == null ? null : todo.getCategory().getId();
         String categoryName = todo.getCategory() == null ? null : todo.getCategory().getName();
-        return new TodoResponse(todo.getId(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName);
+        return new TodoResponse(todo.getId(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName, todo.isDone());
     }
 }

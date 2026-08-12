@@ -32,6 +32,9 @@ public class Todo {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "is_done", nullable = false)
+    private boolean isDone = false;
+
     @Column(name = "is_achived", nullable = false)
     private boolean isAchived = false;
 
@@ -73,6 +76,14 @@ public class Todo {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     public boolean isAchived() {

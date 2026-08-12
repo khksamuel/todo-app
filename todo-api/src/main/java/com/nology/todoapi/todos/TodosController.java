@@ -36,6 +36,16 @@ public class TodosController {
         return todosService.findById(id);
     }
 
+    @GetMapping("/deleted")
+    public List<TodoResponse> getDeletedTodos() {
+        return todosService.findAllDeleted();
+    }
+
+    @GetMapping("/{id}/done")
+    public TodoResponse markTodoDone(@PathVariable Long id) {
+        return todosService.markDone(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResponse createTodo(@RequestBody TodoRequest request) {
@@ -51,5 +61,35 @@ public class TodosController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTodo(@PathVariable Long id) {
         todosService.softDelete(id);
+    }
+
+    @DeleteMapping("/done/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDoneTodo(@PathVariable Long id) {
+        todosService.softDeleteDone(id);
+    }
+
+    @DeleteMapping("/done")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAllDoneTodos() {
+        todosService.softDeleteAllDone();
+    }
+
+    @DeleteMapping("/{id}/permanent")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void permanentlyDeleteTodo(@PathVariable Long id) {
+        todosService.hardDelete(id);
+    }
+
+    @DeleteMapping("/deleted/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void permanentlyDeleteDeletedTodo(@PathVariable Long id) {
+        todosService.hardDelete(id);
+    }
+
+    @DeleteMapping("/deleted")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void permanentlyDeleteAllDeletedTodos() {
+        todosService.hardDeleteAllDeleted();
     }
 }

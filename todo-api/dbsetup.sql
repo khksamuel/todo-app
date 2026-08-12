@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS todo_app.todos (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     due_at DATETIME NULL,
     category_id BIGINT UNSIGNED NULL,
+    is_done BOOLEAN NOT NULL DEFAULT FALSE,
     is_achived BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_todos_category
         FOREIGN KEY (category_id)
@@ -52,3 +53,19 @@ SET @todos_sql = IF(
 PREPARE todos_statement FROM @todos_sql;
 EXECUTE todos_statement;
 DEALLOCATE PREPARE todos_statement;
+
+SET @todos_has_is_done = (
+    SELECT COUNT(*)
+    FROM information_schema.columns
+    WHERE table_schema = 'todo_app'
+      AND table_name = 'todos'
+      AND column_name = 'is_done'
+);
+SET @todos_done_sql = IF(
+    @todos_has_is_done = 0,
+    'ALTER TABLE todo_app.todos ADD COLUMN is_done BOOLEAN NOT NULL DEFAULT FALSE',
+    'SELECT 1'
+);
+PREPARE todos_done_statement FROM @todos_done_sql;
+EXECUTE todos_done_statement;
+DEALLOCATE PREPARE todos_done_statement;

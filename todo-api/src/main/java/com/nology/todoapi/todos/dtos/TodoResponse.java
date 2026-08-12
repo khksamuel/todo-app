@@ -7,6 +7,7 @@ public record TodoResponse(
         LocalDateTime createdAt,
         LocalDateTime dueAt,
         Long categoryId,
-        String categoryName
+        String categoryName,
+        boolean isDone
 ) {
 }
