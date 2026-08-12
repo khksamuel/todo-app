@@ -1,0 +1,26 @@
+.todo-dialog {
+  label {
+    display: grid;
+    gap: 6px;
+    margin: 12px 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  input,
+  textarea,
+  select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #9ca3af;
+    border-radius: 6px;
+    background: #fff;
+    color: #1f2937;
+    font: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}

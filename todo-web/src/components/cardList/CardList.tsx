@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./CardList.scss";
 
-function CardList(props: { cards: Todo[]; filter: string }) {
+function CardList(props: { cards: Todo[]; filter: string; onAddTodo: () => void }) {
 
     return (
         <div className="card-list">
-            <button aria-label="Add new todo" className="todo-card todo-card--add" type="button">
+            <button aria-label="Add new todo" className="todo-card todo-card--add" onClick={props.onAddTodo} type="button">
                 <FontAwesomeIcon icon={faPlus} />
             </button>
             {props.cards
