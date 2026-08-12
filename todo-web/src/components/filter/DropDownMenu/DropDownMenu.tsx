@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { getCategories, editCategory, deleteCategory, type Category } from "../../../util/category";
 import CategoryDialog from "../../category/CategoryDialog";
+import AddButton from "../AddButton/AddButton";
 import "./DropDownMenu.scss";
 
 interface DropDownMenuProps {
-  reloadToken: number;
+  onCategoryChange: (categoryId: number | undefined, filter: string) => void;
 }
 
-function DropDownMenu({ reloadToken }: DropDownMenuProps) {
+function DropDownMenu({ onCategoryChange }: DropDownMenuProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -22,20 +23,35 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [dialogError, setDialogError] = useState("");
 
-  useEffect(() => {
-    const loadCategories = async (): Promise<void> => {
-      try {
-        setError("");
-        setCategories(await getCategories());
-      } catch (error: unknown) {
-        setError(error instanceof Error ? error.message : "Unable to load categories.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadCategories = async (): Promise<void> => {
+    try {
+      setError("");
+      setCategories(await getCategories());
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "Unable to load categories.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    void loadCategories();
-  }, [reloadToken]);
+  useEffect(() => {
+    let isCurrent = true;
+
+    getCategories()
+      .then((loadedCategories) => {
+        if (isCurrent) setCategories(loadedCategories);
+      })
+      .catch((error: unknown) => {
+        if (isCurrent) setError(error instanceof Error ? error.message : "Unable to load categories.");
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   const selectedCategory = categories.find((category) => category.id === Number(selectedCategoryId));
 
@@ -79,7 +95,10 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
       setIsSaving(true);
       await deleteCategory(activeCategory.id);
       setCategories((currentCategories) => currentCategories.filter((item) => item.id !== activeCategory.id));
-      if (selectedCategoryId === String(activeCategory.id)) setSelectedCategoryId("");
+      if (selectedCategoryId === String(activeCategory.id)) {
+        setSelectedCategoryId("");
+        onCategoryChange(undefined, "");
+      }
       closeDialog();
     } catch (error: unknown) {
       setDialogError(error instanceof Error ? error.message : "Unable to delete category.");
@@ -96,7 +115,6 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
 
   return (
     <div className="category-dropdown">
-      Category
       <button
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -105,7 +123,7 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
         onClick={() => setIsOpen((current) => !current)}
         type="button"
       >
-        {selectedCategory ? selectedCategory.name : "Select a category"}
+        {selectedCategory ? selectedCategory.name : "All categories"}
         <span aria-hidden="true">▾</span>
       </button>
       {isOpen && (
@@ -115,6 +133,7 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
               className="category-dropdown__option"
               onClick={() => {
                 setSelectedCategoryId("");
+                onCategoryChange(undefined, "");
                 setIsOpen(false);
               }}
               type="button"
@@ -128,6 +147,7 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
                 className="category-dropdown__option"
                 onClick={() => {
                   setSelectedCategoryId(String(category.id));
+                  onCategoryChange(category.id, category.name);
                   setIsOpen(false);
                 }}
                 type="button"
@@ -147,6 +167,7 @@ function DropDownMenu({ reloadToken }: DropDownMenuProps) {
           ))}
         </ul>
       )}
+      <AddButton onCategoryAdded={() => void loadCategories()} />
       {error && <span className="category-dropdown__error">{error}</span>}
       {dialogMode !== null && activeCategory !== null && (
         <CategoryDialog

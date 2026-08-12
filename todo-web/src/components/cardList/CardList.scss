@@ -1,0 +1,23 @@
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-auto-rows: 220px;
+  gap: 16px;
+  width: min(100%, 1080px);
+}
+
+.todo-card--add {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  border: 2px dashed #9ca3af;
+  background: #f9fafb;
+  color: #4f46e5;
+  cursor: pointer;
+  font-size: 2rem;
+
+  &:hover {
+    border-color: #4f46e5;
+    background: #eef2ff;
+  }
+}

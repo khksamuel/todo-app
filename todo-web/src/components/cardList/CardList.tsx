@@ -1,17 +1,21 @@
 import Card from "../card/Card.tsx";
+import type { Todo } from "../../util/todos";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import "./CardList.scss";
 
-interface CardInterface {
-    id: number;
-    title: string;
-    description: string;
-}
+function CardList(props: { cards: Todo[]; filter: string }) {
 
-function CardList(props: { cards: CardInterface[] }) {
     return (
         <div className="card-list">
-            {props.cards.map((card) => (
-                <Card key={card.id} {...card} />
-            ))}
+            <button aria-label="Add new todo" className="todo-card todo-card--add" type="button">
+                <FontAwesomeIcon icon={faPlus} />
+            </button>
+            {props.cards
+                .filter((card) => props.filter === "" || card.categoryName?.includes(props.filter))
+                .map((card) => (
+                    <Card key={card.id} {...card} />
+                ))}
         </div>
     );
 }

@@ -85,6 +85,7 @@ class TodoEndpointsIntegrationTests {
                 .body("name", equalTo("Write integration tests"))
                 .body("description", equalTo("Verify the todo API"))
                 .body("categoryId", equalTo((int) categoryId))
+                .body("categoryColour", equalTo("#9333EA"))
                 .body("isDone", equalTo(false));
 
         given()

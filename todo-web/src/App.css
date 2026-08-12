@@ -185,6 +185,6 @@
 .category-controls {
   display: grid;
   gap: 12px;
-  width: min(100% - 32px, 320px);
+  width: min(100% - 32px, 1080px);
   margin: 48px auto;
 }

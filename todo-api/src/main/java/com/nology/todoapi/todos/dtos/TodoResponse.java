@@ -10,6 +10,7 @@ public record TodoResponse(
         LocalDateTime dueAt,
         Long categoryId,
         String categoryName,
+        String categoryColour,
         boolean isDone
 ) {
 }

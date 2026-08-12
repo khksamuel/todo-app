@@ -103,6 +103,7 @@ public class TodosService {
     private TodoResponse toResponse(Todo todo) {
         Long categoryId = todo.getCategory() == null ? null : todo.getCategory().getId();
         String categoryName = todo.getCategory() == null ? null : todo.getCategory().getName();
-        return new TodoResponse(todo.getId(), todo.getName(), todo.getDescription(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName, todo.isDone());
+        String categoryColour = todo.getCategory() == null ? null : todo.getCategory().getColour();
+        return new TodoResponse(todo.getId(), todo.getName(), todo.getDescription(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName, categoryColour, todo.isDone());
     }
 }

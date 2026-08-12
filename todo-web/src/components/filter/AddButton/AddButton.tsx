@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addCategory } from "../../../util/category";
 import CategoryDialog from "../../category/CategoryDialog";
+import "./AddButton.scss";
 
 interface AddButtonProps {
   onCategoryAdded?: () => void;
@@ -41,7 +42,7 @@ function AddButton({ onCategoryAdded }: AddButtonProps) {
 
   return (
     <>
-      <button type="button" onClick={() => setIsOpen(true)}>
+      <button className="add-category-button" type="button" onClick={() => setIsOpen(true)}>
         Add category
       </button>
 
