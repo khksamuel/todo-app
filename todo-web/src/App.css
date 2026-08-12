@@ -182,3 +182,9 @@
     border-right-color: var(--border);
   }
 }
+.category-controls {
+  display: grid;
+  gap: 12px;
+  width: min(100% - 32px, 320px);
+  margin: 48px auto;
+}

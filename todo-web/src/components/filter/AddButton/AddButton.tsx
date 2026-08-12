@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { addCategory } from "../../../util/category";
-import Popup from "./PopUp/PopUp";
+import CategoryDialog from "../../category/CategoryDialog";
 
-function AddButton() {
+interface AddButtonProps {
+  onCategoryAdded?: () => void;
+}
+
+function AddButton({ onCategoryAdded }: AddButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [colour, setColour] = useState("#2563EB");
@@ -25,6 +29,7 @@ function AddButton() {
       setLoading(true);
       setError("");
       await addCategory(name.trim(), colour.trim());
+      onCategoryAdded?.();
       setIsOpen(false);
       resetForm();
     } catch (error: unknown) {
@@ -40,12 +45,13 @@ function AddButton() {
         Add category
       </button>
 
-      <Popup
+      <CategoryDialog
         isOpen={isOpen}
         onClose={() => {
           setIsOpen(false);
           resetForm();
         }}
+        mode="add"
         name={name}
         setName={setName}
         colour={colour}
