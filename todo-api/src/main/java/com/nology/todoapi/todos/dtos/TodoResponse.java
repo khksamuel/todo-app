@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public record TodoResponse(
         Long id,
+        String name,
+        String description,
         LocalDateTime createdAt,
         LocalDateTime dueAt,
         Long categoryId,

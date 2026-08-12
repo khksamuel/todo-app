@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS todo_app.categories (
 
 CREATE TABLE IF NOT EXISTS todo_app.todos (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     due_at DATETIME NULL,
     category_id BIGINT UNSIGNED NULL,
@@ -69,3 +71,35 @@ SET @todos_done_sql = IF(
 PREPARE todos_done_statement FROM @todos_done_sql;
 EXECUTE todos_done_statement;
 DEALLOCATE PREPARE todos_done_statement;
+
+SET @todos_has_name = (
+    SELECT COUNT(*)
+    FROM information_schema.columns
+    WHERE table_schema = 'todo_app'
+      AND table_name = 'todos'
+      AND column_name = 'name'
+);
+SET @todos_name_sql = IF(
+    @todos_has_name = 0,
+    'ALTER TABLE todo_app.todos ADD COLUMN name VARCHAR(255) NOT NULL DEFAULT '''' AFTER id',
+    'SELECT 1'
+);
+PREPARE todos_name_statement FROM @todos_name_sql;
+EXECUTE todos_name_statement;
+DEALLOCATE PREPARE todos_name_statement;
+
+SET @todos_has_description = (
+    SELECT COUNT(*)
+    FROM information_schema.columns
+    WHERE table_schema = 'todo_app'
+      AND table_name = 'todos'
+      AND column_name = 'description'
+);
+SET @todos_description_sql = IF(
+    @todos_has_description = 0,
+    'ALTER TABLE todo_app.todos ADD COLUMN description TEXT NULL AFTER name',
+    'SELECT 1'
+);
+PREPARE todos_description_statement FROM @todos_description_sql;
+EXECUTE todos_description_statement;
+DEALLOCATE PREPARE todos_description_statement;

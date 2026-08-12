@@ -41,11 +41,13 @@ public class TodosService {
 
     public TodoResponse create(TodoRequest request) {
         Category category = request.categoryId() == null ? null : findCategory(request.categoryId());
-        return toResponse(todosRepository.save(new Todo(request.dueAt(), category)));
+        return toResponse(todosRepository.save(new Todo(request.name(), request.description(), request.dueAt(), category)));
     }
 
     public TodoResponse update(Long id, TodoUpdateRequest request) {
         Todo todo = findActive(id);
+        if (request.name() != null) todo.setName(request.name());
+        if (request.description() != null) todo.setDescription(request.description());
         if (request.dueAt() != null) todo.setDueAt(request.dueAt());
         if (request.categoryId() != null) todo.setCategory(findCategory(request.categoryId()));
         return toResponse(todosRepository.save(todo));
@@ -101,6 +103,6 @@ public class TodosService {
     private TodoResponse toResponse(Todo todo) {
         Long categoryId = todo.getCategory() == null ? null : todo.getCategory().getId();
         String categoryName = todo.getCategory() == null ? null : todo.getCategory().getName();
-        return new TodoResponse(todo.getId(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName, todo.isDone());
+        return new TodoResponse(todo.getId(), todo.getName(), todo.getDescription(), todo.getCreatedAt(), todo.getDueAt(), categoryId, categoryName, todo.isDone());
     }
 }

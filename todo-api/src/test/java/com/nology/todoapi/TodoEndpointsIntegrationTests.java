@@ -82,6 +82,8 @@ class TodoEndpointsIntegrationTests {
                 .then()
                 .statusCode(200)
                 .body("id", equalTo((int) todoId))
+                .body("name", equalTo("Write integration tests"))
+                .body("description", equalTo("Verify the todo API"))
                 .body("categoryId", equalTo((int) categoryId))
                 .body("isDone", equalTo(false));
 
@@ -95,11 +97,13 @@ class TodoEndpointsIntegrationTests {
 
         given()
                 .contentType(ContentType.JSON)
-                .body("{\"dueAt\":\"2026-12-02T10:30:00\"}")
+                .body("{\"name\":\"Update integration tests\",\"description\":\"Verify the revised API\",\"dueAt\":\"2026-12-02T10:30:00\"}")
                 .when()
                 .patch("/todos/{id}", todoId)
                 .then()
                 .statusCode(200)
+                .body("name", equalTo("Update integration tests"))
+                .body("description", equalTo("Verify the revised API"))
                 .body("dueAt", equalTo("2026-12-02T10:30:00"));
 
         given()
@@ -195,7 +199,7 @@ class TodoEndpointsIntegrationTests {
     private long createTodo(long categoryId, String dueAt) {
         return given()
                 .contentType(ContentType.JSON)
-                .body("{\"dueAt\":\"" + dueAt + "\",\"categoryId\":" + categoryId + "}")
+                .body("{\"name\":\"Write integration tests\",\"description\":\"Verify the todo API\",\"dueAt\":\"" + dueAt + "\",\"categoryId\":" + categoryId + "}")
                 .when()
                 .post("/todos")
                 .then()

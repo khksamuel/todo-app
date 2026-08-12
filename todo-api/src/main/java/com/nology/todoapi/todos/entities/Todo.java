@@ -22,6 +22,12 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 255)
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -42,7 +48,9 @@ public class Todo {
         // Required by JPA.
     }
 
-    public Todo(LocalDateTime dueAt, Category category) {
+    public Todo(String name, String description, LocalDateTime dueAt, Category category) {
+        this.name = name;
+        this.description = description;
         this.dueAt = dueAt;
         this.category = category;
     }
@@ -60,6 +68,22 @@ public class Todo {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getDueAt() {
