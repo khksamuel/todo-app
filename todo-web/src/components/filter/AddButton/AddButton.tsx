@@ -5,13 +5,13 @@ import Popup from "./PopUp/PopUp";
 function AddButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
-  const [colour, setColour] = useState("");
+  const [colour, setColour] = useState("#2563EB");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const resetForm = (): void => {
     setName("");
-    setColour("");
+    setColour("#2563EB");
     setError("");
   };
 
