@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { getCategories, type Category } from "../../util/category";
-import { createTodo } from "../../util/todos";
+import { createTodo, updateTodo, type Todo } from "../../util/todos";
 import "../category/CategoryDialog.scss";
 import "./TodoDialog.scss";
 
 interface TodoDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreated: () => void;
+  onSaved: () => void;
+  todoToEdit?: Todo | null;
 }
 
-function TodoDialog({ isOpen, onClose, onCreated }: TodoDialogProps) {
+function TodoDialog({ isOpen, onClose, onSaved, todoToEdit }: TodoDialogProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueAt, setDueAt] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [name, setName] = useState(() => todoToEdit?.name ?? "");
+  const [description, setDescription] = useState(() => todoToEdit?.description ?? "");
+  const [dueAt, setDueAt] = useState(() => todoToEdit?.dueAt?.slice(0, 19) ?? "");
+  const [categoryId, setCategoryId] = useState(() => todoToEdit?.categoryId ? String(todoToEdit.categoryId) : "");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -53,17 +54,19 @@ function TodoDialog({ isOpen, onClose, onCreated }: TodoDialogProps) {
     try {
       setError("");
       setIsSaving(true);
-      await createTodo({
+      const todoDetails = {
         name: name.trim(),
         description: description.trim() || undefined,
         dueAt: dueAt || undefined,
         categoryId: categoryId ? Number(categoryId) : undefined,
-      });
-      setName("");
-      setDescription("");
-      setDueAt("");
-      setCategoryId("");
-      onCreated();
+      };
+
+      if (todoToEdit) {
+        await updateTodo(todoToEdit.id, todoDetails);
+      } else {
+        await createTodo(todoDetails);
+      }
+      onSaved();
       onClose();
     } catch (saveError: unknown) {
       setError(saveError instanceof Error ? saveError.message : "Unable to create the todo.");
@@ -81,7 +84,7 @@ function TodoDialog({ isOpen, onClose, onCreated }: TodoDialogProps) {
         onMouseDown={(event) => event.stopPropagation()}
         role="dialog"
       >
-        <h3 id="todo-dialog-title">Add todo</h3>
+        <h3 id="todo-dialog-title">{todoToEdit ? "Edit todo" : "Add todo"}</h3>
         <label>
           Name
           <input ref={nameInputRef} value={name} onChange={(event) => setName(event.target.value)} placeholder="Todo name" />
@@ -105,7 +108,7 @@ function TodoDialog({ isOpen, onClose, onCreated }: TodoDialogProps) {
         <div className="category-dialog__actions">
           <button type="button" onClick={close} disabled={isSaving}>Cancel</button>
           <button type="button" onClick={() => void handleSubmit()} disabled={isSaving || !name.trim()}>
-            {isSaving ? "Adding..." : "Add todo"}
+            {isSaving ? "Saving..." : todoToEdit ? "Save changes" : "Add todo"}
           </button>
         </div>
       </div>

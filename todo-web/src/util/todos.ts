@@ -111,6 +111,31 @@ export function permanentlyDeleteDeletedTodo(id: number): Promise<void> {
   return apiFetch<void>(`/todos/deleted/${id}`, { method: "DELETE" }).then(() => undefined);
 }
 
+export function editTodo(id: number, updates: UpdateTodoRequest): Promise<Todo> {
+  return requireTodo(
+    apiFetch<Todo>(`/todos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
+    }),
+  );
+}
+
+export function duplicateTodo(todo: Todo): Promise<Todo> {
+  return requireTodo(
+    apiFetch<Todo>(`/todos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: todo.name,
+        description: todo.description,
+        dueAt: todo.dueAt,
+        categoryId: todo.categoryId,
+      }),
+    }),
+  );
+}
+
 export default {
   getAllTodos,
   createTodo,
