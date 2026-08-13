@@ -165,6 +165,20 @@ function DropDownMenu({ onCategoryChange }: DropDownMenuProps) {
               </div>
             </li>
           ))}
+          {/* Not yet implemented because done is not implemented as a category */}
+          {/* <li>
+            <button
+              className="category-dropdown__option"
+              onClick={() => {
+                setSelectedCategoryId("");
+                onCategoryChange(undefined, "");
+                setIsOpen(false);
+              }}
+              type="button"
+            >
+              Done
+            </button>
+          </li> */}
         </ul>
       )}
       <AddButton onCategoryAdded={() => void loadCategories()} />
